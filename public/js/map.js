@@ -10,10 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     zoom: 12
   });
 
-  window.listingCoordinates = "<%= JSON.stringify(listing.geometry.coordinates) %>";
-  window.listingLocation = "<%= listing.location %>";
-  window.maptilerApiKey = "<%= maptilerApiKey %>";
-
   // Create a custom Airbnb-style red marker
   const el = document.createElement('div');
   el.className = 'custom-marker';

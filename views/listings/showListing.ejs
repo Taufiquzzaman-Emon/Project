@@ -101,4 +101,9 @@
   <h4>Location</h4>
   <div id="map" style="height: 400px;"></div>
 </div>
+<script>
+  window.listingCoordinates = <%= JSON.stringify(listing.geometry.coordinates) %>;
+  window.listingLocation = "<%= listing.location %>";
+  window.maptilerApiKey = "<%= maptilerApiKey %>";
+</script>
 <script src="/js/map.js"></script>
