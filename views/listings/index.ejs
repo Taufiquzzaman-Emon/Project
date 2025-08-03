@@ -1,0 +1,48 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-4">
+  <% if (searchTerm && searchTerm.trim() !== "") { %>
+    <h3 class="text-center mb-4">Search results for "<%= searchTerm %>"</h3>
+  <% } else { %>
+    <h3 class="text-center mb-4">All Listings</h3>
+  <% } %>
+
+  <!-- Single AI Recommendation Button with Loading Spinner -->
+  <div class="mb-4 d-flex justify-content-start align-items-center">
+    <button id="ai-recommend-btn" class="btn btn-primary btn-lg fw-bold shadow-sm" style="border-radius: 30px;">
+      💡 Show AI Recommendations
+    </button>
+    <div id="loading-spinner" class="spinner-border text-primary ms-3" role="status" style="display: none;">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <% if (allListings.length === 0) { %>
+    <p class="text-center">No listings found.</p>
+  <% } %>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3">
+    <% allListings.forEach(function(listing) { %>
+      <div class="col">
+        <div class="card listing-card h-100">
+          <a href="/listings/<%= listing._id %>" class="listing-link text-decoration-none">
+            <img
+              src="<%= listing.image.url %>"
+              class="card-img-top"
+              alt="listing_img"
+              style="height: 20rem; object-fit: cover"
+            />
+          </a>
+          <div class="card-body">
+            <p class="card-text fw-bold"><%= listing.title %></p>
+            <p class="card-text text-muted">
+              &dollar;<%= listing.price %> / night
+            </p>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<script src="/js/map.js"></script>

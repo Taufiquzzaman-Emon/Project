@@ -1,0 +1,179 @@
+<nav
+  class="navbar bg-body-light border-bottom sticky-top"
+  style="min-height: 80px; overflow: visible; position: relative"
+>
+  <div class="container-fluid d-flex align-items-center position-relative">
+    <!-- Brand -->
+    <a
+      class="navbar-brand d-flex align-items-center gap-2"
+      href="/listings"
+      style="
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #ff5a5f;
+        min-width: 180px;
+      "
+    >
+      <i
+        class="fa-solid fa-paper-plane"
+        style="color: #ff5a5f; font-size: 1.4rem"
+      ></i>
+      <span>Voyago</span>
+    </a>
+
+    <!-- Centered content container -->
+    <div
+      class="position-absolute top-50 start-50 translate-middle d-flex flex-column align-items-center mt-4"
+      style="max-width: 60vw; transform: translate(-50%, -60%)"
+    >
+      <!-- Nav links ABOVE search -->
+      <ul
+        class="navbar-nav d-flex flex-row gap-4 mb-3"
+        style="white-space: nowrap; overflow-x: auto"
+      >
+        <li class="nav-item text-center">
+          <a class="nav-link" href="/listings">
+            <i class="fa-solid fa-house d-block"></i>
+            Homes
+          </a>
+        </li>
+        <li class="nav-item text-center">
+          <a class="nav-link" href="/listings">
+            <i class="fa-solid fa-person-hiking d-block"></i>
+            Experiences
+          </a>
+        </li>
+        <li class="nav-item text-center">
+          <a class="nav-link" href="/listings">
+            <i class="fa-solid fa-bell d-block"></i>
+            Services
+          </a>
+        </li>
+      </ul>
+
+      <!-- Airbnb-style Search Box -->
+      <form
+        action="/listings"
+        method="GET"
+        style="min-width: 300px; max-width: 600px; width: 100%"
+      >
+        <div
+          class="bg-white rounded-pill shadow-sm d-flex align-items-center px-3 py-2 gap-3 mb-5"
+          style="border: 1px solid #ccc"
+        >
+          <!-- Location -->
+          <div class="d-flex flex-column" style="cursor: pointer">
+            <span style="font-size: 0.75rem; font-weight: 600">Where</span>
+            <input
+              type="text"
+              class="border-0 p-0 m-0 bg-white"
+              placeholder="Search destinations"
+              name="location"
+              style="font-size: 0.9rem; width: 120px; outline: none"
+            />
+          </div>
+
+          <div style="width: 1px; background-color: #ccc; height: 24px"></div>
+
+          <!-- Check-in -->
+          <div class="d-none d-md-flex flex-column" style="cursor: pointer">
+            <span style="font-size: 0.75rem; font-weight: 600">Check in</span>
+            <span style="font-size: 0.9rem; color: #777">Add dates</span>
+          </div>
+
+          <div
+            style="width: 1px; background-color: #ccc; height: 24px"
+            class="d-none d-md-block"
+          ></div>
+
+          <!-- Check-out -->
+          <div class="d-none d-md-flex flex-column" style="cursor: pointer">
+            <span style="font-size: 0.75rem; font-weight: 600">Check out</span>
+            <span style="font-size: 0.9rem; color: #777">Add dates</span>
+          </div>
+
+          <div
+            style="width: 1px; background-color: #ccc; height: 24px"
+            class="d-none d-md-block"
+          ></div>
+
+          <!-- Guests -->
+          <div class="d-flex flex-column" style="cursor: pointer">
+            <span style="font-size: 0.75rem; font-weight: 600">Who</span>
+            <span style="font-size: 0.9rem; color: #777">Add guests</span>
+          </div>
+
+          <!-- Search Button -->
+          <button
+            type="submit"
+            class="btn btn-danger d-flex align-items-center justify-content-center rounded-circle"
+            style="width: 36px; height: 36px"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right-side items -->
+    <div class="d-flex align-items-center ms-auto" style="flex-shrink: 0">
+      <a
+        class="nav-link me-3 d-none d-md-block"
+        href="/listings/new"
+        style="white-space: nowrap"
+        >Offer a Stay</a
+      >
+
+      <div class="dropdown">
+        <button
+          class="btn btn-light dropdown-toggle"
+          type="button"
+          id="userDropdown"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="fa-solid fa-user"></i>
+        </button>
+
+        <ul
+          class="dropdown-menu dropdown-menu-end mt-2"
+          aria-labelledby="userDropdown"
+        >
+          <% if (!currUser) { %>
+          <li>
+            <a
+              class="dropdown-item d-flex align-items-center gap-2"
+              href="/login"
+            >
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item d-flex align-items-center gap-2"
+              href="/register"
+            >
+              <i class="fa-regular fa-registered"></i> Register
+            </a>
+          </li>
+          <% } else { %>
+          <li>
+            <span class="dropdown-item-text d-flex align-items-center gap-2">
+              <i class="fa-regular fa-user"></i> <%= currUser.username %>
+            </span>
+          </li>
+          <li>
+            <a
+              class="dropdown-item d-flex align-items-center gap-2"
+              href="/logout"
+            >
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
+          </li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

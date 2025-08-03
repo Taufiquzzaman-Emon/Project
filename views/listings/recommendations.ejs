@@ -1,0 +1,30 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-4">
+  <h3 class="text-center mb-4">AI Recommendations for You</h3>
+
+  <% if (!recommended || recommended.length === 0) { %>
+    <p>No recommendations found based on reviews.</p>
+  <% } else { %>
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+      <% recommended.forEach(listing => { %>
+        <div class="col">
+          <div class="card h-100">
+            <a href="/listings/<%= listing._id %>" class="text-decoration-none">
+              <img
+                src="<%= listing.image.url %>"
+                class="card-img-top"
+                style="height: 20rem; object-fit: cover"
+                alt="listing image"
+              />
+              <div class="card-body">
+                <p class="fw-bold"><%= listing.title %></p>
+                <p class="text-muted">&dollar;<%= listing.price %> / night</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</div>

@@ -1,0 +1,175 @@
+body {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1;
+}
+
+/* navbar */
+.navbar {
+  position: relative;
+  overflow: visible;
+  height: 10rem;
+  background-color: white;
+}
+
+.fa-plane {
+  color: #fe424d;
+  font-size: 2rem;
+}
+
+.nav-link {
+  color: black !important;
+  font-size: 1.2rem;
+}
+.f-info-links a {
+  text-decoration: none;
+  color: black;
+}
+.nav-link.d-flex {
+  flex-direction: column;
+  align-items: center;
+  font-size: 1rem; /* optional: smaller text */
+  gap: 0.25rem; /* space between icon and text */
+  white-space: nowrap; /* prevent breaking */
+}
+
+.f-info-links a:hover {
+  text-decoration: underline;
+}
+
+.f-info-links,
+.f-info-socials,
+.f-info-brand {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.f-info-socials i {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+}
+
+.f-info {
+  text-align: center;
+  display: flex;
+  height: 5rem;
+  background-color: #ebebeb;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: space-evenly;
+}
+
+.listing-card {
+  border: none !important;
+  margin-bottom: 2rem;
+}
+
+/* new page btn */
+.add-btn {
+  background-color: #fe424d !important;
+  border: none !important;
+}
+
+/* edit btn */
+.edit-btn {
+  background-color: #fe424d !important;
+  border: none !important;
+}
+
+.card-img-top {
+  border-radius: 1rem !important;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+
+.card-body {
+  padding: 0 !important;
+}
+
+.card-text {
+  font-weight: 400 !important;
+}
+
+.listing-link {
+  text-decoration: none;
+}
+
+.card-img-overlay {
+  opacity: 0;
+}
+
+.card-img-overlay:hover {
+  opacity: 0.2;
+  background-color: white;
+}
+
+/* showlisting page */
+
+.show-img {
+  height: 30vh;
+  object-fit: cover;
+}
+
+.show-card {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+/* Map container */
+#map {
+  height: 400px;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 1rem;
+}
+
+/* Custom marker style */
+.custom-marker {
+  background-color: #FF5A5F;
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 0 4px rgba(0,0,0,0.3);
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+/* Centered navbar nav (absolute center) */
+.navbar-nav.position-absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 60vw;
+  white-space: nowrap;
+  overflow-x: auto;
+  margin-bottom: 0;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 1rem;
+}
+input::placeholder {
+  color: #999;
+  font-size: 0.9rem;
+}
+input:focus {
+  outline: none;
+  box-shadow: none;
+}
