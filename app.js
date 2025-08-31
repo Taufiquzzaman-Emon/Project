@@ -1,8 +1,7 @@
-if(process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-const MAPTILER_API_KEY = process.env.MAPTILER_API_KEY;
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -10,30 +9,31 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
-const dbUrl = process.env.ATLASDB_URL;
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const flash = require("express-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const Booking = require("./models/booking");
+const Listing = require("./models/listing");
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const bookingRoutes = require("./routes/bookings");
 
-main()
-.then(()=>{
-  console.log("connected to MongoDB");
-})
-.catch((err) => {
-  console.log("MongoDB connection error:", err);
-});
+// --- Connect to MongoDB ---
+const dbUrl = process.env.ATLASDB_URL;
 
 async function main() {
   await mongoose.connect(dbUrl);
+  console.log("Connected to MongoDB");
 }
 
+main().catch((err) => console.log("MongoDB connection error:", err));
+
+// --- View Engine & Middleware ---
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
@@ -41,84 +41,97 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 
-app.use('/maplibre', express.static(path.join(__dirname, 'node_modules/maplibre-gl/dist')));
-
+// --- Session & Flash ---
 const store = MongoStore.create({
   mongoUrl: dbUrl,
-  crypto:{
+  crypto: { secret: process.env.SECRET },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", (err) => console.log("Session Store Error:", err));
+
+app.use(
+  session({
+    store,
     secret: process.env.SECRET,
-  },
-  touchAfter:24 * 3600,
-});
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+    },
+  })
+);
 
-store.on("error", (err) => {
-  console.log("Session Store Error:", err);
-});
-
-
-const sessionOptions = {
-  store,
-  secret: process.env.SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-  },
-};
-
-
-// Session and Flash configuration
-
-app.use(session(sessionOptions));
 app.use(flash());
 
-// Passport configuration
-
+// --- Passport ---
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Middleware to set flash messages in res.locals for use in views
-
+// --- Make user & flash available in all views ---
 app.use((req, res, next) => {
-  res.locals.success = req.flash("success");
-  res.locals.dlt = req.flash("dlt");
-  res.locals.error = req.flash("error");
-  res.locals.currUser = req.user;
+  res.locals.currUser = req.user || null; // so EJS can use currUser safely
+  res.locals.success = req.flash("success") || [];
+  res.locals.dlt = req.flash("dlt") || [];
+  res.locals.error = req.flash("error") || [];
   next();
 });
 
-main()
-  .then(() => {
-    console.log("connected");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// --- Make pending booking count available globally ---
+app.use(async (req, res, next) => {
+  if (req.user) {
+    try {
+      // Get listings owned by current user
+      const listings = await Listing.find({ owner: req.user._id });
+      const listingIds = listings.map((l) => l._id);
 
+      // Count pending bookings for these listings
+      const pendingCount = await Booking.countDocuments({
+        listing: { $in: listingIds },
+        status: "pending",
+      });
+
+      res.locals.pendingCount = pendingCount;
+    } catch (err) {
+      res.locals.pendingCount = 0;
+    }
+  } else {
+    res.locals.pendingCount = 0;
+  }
+  next();
+});
+
+// --- Routes ---
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
+app.use("/bookings", bookingRoutes); // booking routes
 app.use("/", userRouter);
 
-// Favicon ignore
+// --- MapLibre static ---
+app.use(
+  "/maplibre",
+  express.static(path.join(__dirname, "node_modules/maplibre-gl/dist"))
+);
+
+// --- Favicon ignore ---
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 
-// 404 handler
+// --- 404 handler ---
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
 
-// Global error handler
+// --- Global error handler ---
 app.use((err, req, res, next) => {
   const { statusCode = 500, message = "Something Went Wrong!" } = err;
   res.status(statusCode).render("error.ejs", { message });
 });
 
+// --- Start Server ---
 app.listen(8001, () => {
   console.log("Server is running on port 8001");
 });

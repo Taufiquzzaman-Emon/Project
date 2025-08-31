@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const listingController = require("../controllers/listings");
+const bookingController = require("../controllers/booking");
 const { isLoggedIn, handleMulterError } = require("../middleware");
 
 // Routes
@@ -8,6 +9,8 @@ router.get("/", listingController.index);
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
 router.post("/", isLoggedIn, handleMulterError, listingController.create);
+router.post("/:id/reserve", bookingController.createBooking);
+
 router.get("/recommend", listingController.showRecommendations);
 router.get("/:id", listingController.show);
 router.get("/:id/edit", isLoggedIn, listingController.renderEditForm);

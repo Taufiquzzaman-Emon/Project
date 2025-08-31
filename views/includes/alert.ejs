@@ -1,7 +1,8 @@
-<% const alerts = [ { messages: success, type: 'success' }, { messages: dlt,
-type: 'danger' }, { messages: error, type: 'danger' } ]; %> <%
-alerts.forEach(alert => { %> <% if (alert.messages && alert.messages.length > 0)
-{ %>
+<% const alerts = [ { messages: typeof success !== 'undefined' ? success : [],
+type: 'success' }, { messages: typeof dlt !== 'undefined' ? dlt : [], type:
+'danger' }, { messages: typeof error !== 'undefined' ? error : [], type:
+'danger' } ]; alerts.forEach(alert => { if (alert.messages &&
+alert.messages.length > 0) { %>
 <div
   class="alert alert-<%= alert.type %> alert-dismissible fade show auto-dismiss col-6 offset-3 mt-3"
   role="alert"
@@ -16,4 +17,4 @@ alerts.forEach(alert => { %> <% if (alert.messages && alert.messages.length > 0)
     aria-label="Close"
   ></button>
 </div>
-<% } %> <% }); %>
+<% } }); %>
