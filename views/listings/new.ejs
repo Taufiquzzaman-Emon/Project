@@ -1,80 +1,317 @@
 <% layout("/layouts/boilerplate") %>
-<div class="row mt-3">
-  <div class="col-8 offset-2">
-    <br><br>
-    <h1>Create a New Listing</h1>
-<form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
-  <div  class="mb-3">
-    <label for="title" class="form-label">Title</label>
-    <input
-      class="form-control"
-      name="listing[title]"
-      placeholder="Title"
-      type="text"
-      required
-    />
-    <div class="invalid-feedback">Title is required!</div>
-    <div class="valid-feedback">Looks great!</div>
-  </div>
- 
-  <div  class="mb-3">
-    <label for="description" class="form-label">Description</label>
-    <textarea
-      name="listing[description]"
-      class="form-control"
-      required
-    ></textarea>
-    <div class="invalid-feedback">Please provide a brief description.</div>
-  </div>
-  <div class="mb-3">
-    <label for="image" class="form-label">Upload Image</label>
-    <input
-      name="listing[image]"
-      type="file"
-      class="form-control"
-    />
-  </div>
-<div class="row">
-  <div class="mb-3 col-md-4">
-    <label for="price" class="form-label">Price</label>
-    <input
-      name="listing[price]"
-      placeholder="Price"
-      class="form-control"
-      required
-    />
-    <div class="invalid-feedback">Enter a valid number greater than 0.</div>
-  </div>
+<link rel="stylesheet" href="/css/newListing.css" />
+<div class="listing-form-page">
+  <div class="container mt-5">
+    <!-- Enhanced Header Section -->
+    <div class="form-header text-center mb-5">
+      <div class="header-icon">
+        <i class="fas fa-plus-circle"></i>
+      </div>
+      <h1 class="display-5 fw-bold gradient-text mb-3">Create New Listing</h1>
+      <p class="lead text-muted">
+        Share your space with travelers around the world
+      </p>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text">
+          <span id="progress-text">Step 1 of 4</span>
+        </div>
+      </div>
+    </div>
 
-  <div class="mb-3 col-md-8">
-    <label for="location" class="form-label">Location</label>
-    <input
-      name="listing[location]"
-      placeholder="Location"
-      type="text"
-      class="form-control"
-      required
-    />
-    <div class="invalid-feedback">Location field can't be blank.</div> 
+    <!-- Enhanced Form Container -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="form-container">
+          <form
+            method="POST"
+            action="/listings"
+            novalidate
+            class="enhanced-form needs-validation"
+            enctype="multipart/form-data"
+            id="listing-form"
+          >
+            <!-- Step 1: Basic Information -->
+            <div class="form-step active" data-step="1">
+              <div class="step-header">
+                <div class="step-number">1</div>
+                <div class="step-info">
+                  <h3 class="step-title">Basic Information</h3>
+                  <p class="step-subtitle">Tell us about your property</p>
+                </div>
+              </div>
+
+              <div class="form-fields">
+                <div class="form-group">
+                  <label for="title" class="form-label">
+                    <i class="fas fa-home me-2"></i>Property Title
+                  </label>
+                  <input
+                    class="form-control enhanced-input"
+                    name="listing[title]"
+                    id="title"
+                    placeholder="Amazing downtown apartment with city view"
+                    type="text"
+                    required
+                  />
+                  <div class="field-feedback">
+                    <div class="invalid-feedback">
+                      <i class="fas fa-exclamation-circle me-1"></i>
+                      Please provide a compelling title for your listing
+                    </div>
+                    <div class="valid-feedback">
+                      <i class="fas fa-check-circle me-1"></i>
+                      Great title!
+                    </div>
+                  </div>
+                  <div class="field-helper">
+                    Make it descriptive and appealing to potential guests
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="description" class="form-label">
+                    <i class="fas fa-align-left me-2"></i>Description
+                  </label>
+                  <textarea
+                    name="listing[description]"
+                    id="description"
+                    class="form-control enhanced-textarea"
+                    rows="5"
+                    placeholder="Describe your space, amenities, and what makes it special..."
+                    required
+                  ></textarea>
+                  <div class="field-feedback">
+                    <div class="invalid-feedback">
+                      <i class="fas fa-exclamation-circle me-1"></i>
+                      Please provide a detailed description
+                    </div>
+                    <div class="valid-feedback">
+                      <i class="fas fa-check-circle me-1"></i>
+                      Excellent description!
+                    </div>
+                  </div>
+                  <div class="field-helper">
+                    <span class="char-counter">
+                      <span id="desc-count">0</span> characters
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Property Details -->
+            <div class="form-step" data-step="2">
+              <div class="step-header">
+                <div class="step-number">2</div>
+                <div class="step-info">
+                  <h3 class="step-title">Property Details</h3>
+                  <p class="step-subtitle">Location and pricing information</p>
+                </div>
+              </div>
+
+              <div class="form-fields">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="form-group">
+                      <label for="location" class="form-label">
+                        <i class="fas fa-map-marker-alt me-2"></i>Location
+                      </label>
+                      <input
+                        name="listing[location]"
+                        id="location"
+                        placeholder="New York, NY"
+                        type="text"
+                        class="form-control enhanced-input"
+                        required
+                      />
+                      <div class="field-feedback">
+                        <div class="invalid-feedback">
+                          <i class="fas fa-exclamation-circle me-1"></i>
+                          Location field is required
+                        </div>
+                        <div class="valid-feedback">
+                          <i class="fas fa-check-circle me-1"></i>
+                          Perfect!
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="price" class="form-label">
+                        <i class="fas fa-dollar-sign me-2"></i>Price per night
+                      </label>
+                      <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input
+                          name="listing[price]"
+                          id="price"
+                          placeholder="150"
+                          type="number"
+                          min="1"
+                          class="form-control enhanced-input"
+                          required
+                        />
+                      </div>
+                      <div class="field-feedback">
+                        <div class="invalid-feedback">
+                          <i class="fas fa-exclamation-circle me-1"></i>
+                          Please enter a valid price
+                        </div>
+                        <div class="valid-feedback">
+                          <i class="fas fa-check-circle me-1"></i>
+                          Great price!
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+                <div class="form-group">
+                  <label for="country" class="form-label">
+                    <i class="fas fa-flag me-2"></i>Country
+                  </label>
+                  <input
+                    name="listing[country]"
+                    id="country"
+                    class="form-control enhanced-select"
+                    required
+                  >
+                </input>
+                  <div class="field-feedback">
+                    <div class="invalid-feedback">
+                      <i class="fas fa-exclamation-circle me-1"></i>
+                      Please Enter a country
+                    </div>
+                    <div class="valid-feedback">
+                      <i class="fas fa-check-circle me-1"></i>
+                      Perfect choice!
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Additional Details -->
+            <div class="form-step" data-step="3">
+              <div class="step-header">
+                <div class="step-number">3</div>
+                <div class="step-info">
+                  <h3 class="step-title">Additional Information</h3>
+                  <p class="step-subtitle">
+                    Any extra details about your listing
+                  </p>
+                </div>
+              </div>
+
+              <div class="form-fields">
+                <div class="info-section">
+                  <div class="info-card">
+                    <div class="info-icon">
+                      <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="info-content">
+                      <h6>Almost Done!</h6>
+                      <p>
+                        Your listing will include all the essential details. You
+                        can add more features and amenities after creating the
+                        listing.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4: Photos & Finish -->
+            <div class="form-step" data-step="4">
+              <div class="step-header">
+                <div class="step-number">4</div>
+                <div class="step-info">
+                  <h3 class="step-title">Add Photos</h3>
+                  <p class="step-subtitle">
+                    Upload an image to showcase your property
+                  </p>
+                </div>
+              </div>
+
+              <div class="form-fields">
+                <div class="form-group">
+                  <label for="image" class="form-label">
+                    <i class="fas fa-camera me-2"></i>Property Photo
+                  </label>
+                  <div class="image-upload-area" id="image-upload-area">
+                    <div class="upload-placeholder">
+                      <i class="fas fa-cloud-upload-alt"></i>
+                      <h6>Drag & drop your photo here</h6>
+                      <p>or click to browse</p>
+                      <button type="button" class="btn upload-btn">
+                        Choose Photo
+                      </button>
+                    </div>
+                    <input
+                      name="listing[image]"
+                      id="image"
+                      type="file"
+                      class="form-control file-input"
+                      accept="image/*"
+                    />
+                  </div>
+                  <div class="image-preview" id="image-preview"></div>
+                  <div class="field-helper">
+                    Upload a high-quality photo that showcases your property's
+                    best features
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Navigation -->
+            <div class="form-navigation">
+              <button
+                type="button"
+                class="btn nav-btn prev-btn"
+                id="prev-btn"
+                style="display: none"
+              >
+                <i class="fas fa-arrow-left me-2"></i>Previous
+              </button>
+
+              <div class="step-indicators">
+                <div class="step-dot active" data-step="1"></div>
+                <div class="step-dot" data-step="2"></div>
+                <div class="step-dot" data-step="3"></div>
+                <div class="step-dot" data-step="4"></div>
+              </div>
+
+              <button type="button" class="btn nav-btn next-btn" id="next-btn">
+                Next<i class="fas fa-arrow-right ms-2"></i>
+              </button>
+
+              <button
+                type="submit"
+                class="btn submit-btn"
+                id="submit-btn"
+                style="display: none"
+              >
+                <span class="btn-content">
+                  <i class="fas fa-rocket me-2"></i>Create Listing
+                </span>
+                <span class="btn-loader">
+                  <i class="fas fa-spinner fa-spin"></i>
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-  <div class="mb-3">
-    <label for="country" class="form-label">Country</label>
-    <input
-      name="listing[country]"
-      placeholder="Country"
-      type="text"
-      class="form-control"
-      required
-    />
-    <div class="invalid-feedback">Please specify a country name.</div> 
-  </div>
-  <br /><br />
-  <button class="btn btn-dark mb-3 offset-5 add-btn">Create Listing</button>
-  <br><br>
-</form>
-  </div>
-  
-</div>
-
+<script src="/js/newListing.js"></script>
