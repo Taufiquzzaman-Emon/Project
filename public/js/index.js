@@ -68,6 +68,13 @@ function handleAIRecommendation() {
     });
   }, 2500);
 }
+document.getElementById("ai-recommend-btn").addEventListener("click", () => {
+  // Show the loading overlay
+  document.getElementById("loading-overlay").style.display = "flex";
+
+  // Redirect the user to the recommendations page
+  window.location.href = "/listings/recommendations";
+});
 
 // Toggle favorite functionality
 function toggleFavorite(button, listingId) {

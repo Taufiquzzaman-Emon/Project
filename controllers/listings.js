@@ -64,7 +64,7 @@ module.exports.showRecommendations = async (req, res) => {
 
     const listingScores = [];
 
-    allListings.forEach(listing => {
+    allListings.forEach((listing) => {
       if (!listing.reviews || listing.reviews.length === 0) return;
 
       // Calculate average rating for the listing
@@ -73,7 +73,7 @@ module.exports.showRecommendations = async (req, res) => {
         listing.reviews.length;
 
       // Combine all comments into one string
-      const combinedComments = listing.reviews.map(r => r.comment).join(" ");
+      const combinedComments = listing.reviews.map((r) => r.comment).join(" ");
 
       // Analyze sentiment using the sentiment library
       const sentimentResult = sentiment.analyze(combinedComments);
@@ -86,17 +86,19 @@ module.exports.showRecommendations = async (req, res) => {
       const finalScore = avgRating * 0.6 + sentimentScore * 0.4;
 
       listingScores.push({ listing, score: finalScore });
-
     });
 
     // Sort descending by finalScore
     listingScores.sort((a, b) => b.score - a.score);
 
     // Map to just listings for rendering
-    const recommended = listingScores.map(item => item.listing);
+    const recommended = listingScores.map((item) => item.listing);
 
     if (recommended.length === 0) {
-      req.flash("error", "No recommendations found based on reviews and ratings.");
+      req.flash(
+        "error",
+        "No recommendations found based on reviews and ratings."
+      );
       return res.redirect("/listings");
     }
 

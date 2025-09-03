@@ -11,7 +11,7 @@ router.get("/new", isLoggedIn, listingController.renderNewForm);
 router.post("/", isLoggedIn, handleMulterError, listingController.create);
 router.post("/:id/reserve", bookingController.createBooking);
 
-router.get("/recommend", listingController.showRecommendations);
+router.get("/recommendations", listingController.showRecommendations);
 router.get("/:id", listingController.show);
 router.get("/:id/edit", isLoggedIn, listingController.renderEditForm);
 router.put("/:id", isLoggedIn, handleMulterError, listingController.update);
