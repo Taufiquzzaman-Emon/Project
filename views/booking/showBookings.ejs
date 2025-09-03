@@ -1,27 +1,209 @@
 <% layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/css/showBooking.css" />
 
-<div class="container mt-5">
-  <h1 class="mb-4">My Bookings</h1>
+<div class="bookings-page">
+  <div class="container mt-5">
+    <!-- Enhanced Header Section -->
+    <div class="page-header text-center mb-5">
+      <div class="header-icon">
+        <i class="fas fa-calendar-alt"></i>
+      </div>
+      <h1 class="display-5 fw-bold gradient-text mb-3">My Bookings</h1>
+      <p class="lead text-muted">Manage and track your travel reservations</p>
 
-  <% if(bookings.length === 0){ %>
-  <p>You have no bookings yet.</p>
-  <% } else { %>
-  <div class="list-group">
-    <% bookings.forEach(booking => { %>
-    <div class="list-group-item mb-3 shadow-sm">
-      <h5><%= booking.listing.title %></h5>
-      <p>
-        <strong>Location:</strong> <%= booking.listing.location %>, <%=
-        booking.listing.country %><br />
-        <strong>Owner:</strong> <%= booking.listing.owner.username %><br />
-        <strong>Check-in:</strong> <%= new
-        Date(booking.checkin).toLocaleDateString() %><br />
-        <strong>Check-out:</strong> <%= new
-        Date(booking.checkout).toLocaleDateString() %><br />
-        <strong>Status:</strong> <%= booking.status %>
-      </p>
+      <% if(bookings.length > 0){ %>
+      <div class="bookings-stats">
+        <div class="stat-item">
+          <span class="stat-number"><%= bookings.length %></span>
+          <span class="stat-label"
+            ><%= bookings.length === 1 ? 'Booking' : 'Bookings' %></span
+          >
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">
+            <%= bookings.filter(b => b.status === 'pending').length %>
+          </span>
+          <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">
+            <%= bookings.filter(b => b.status === 'accepted').length %>
+          </span>
+          <span class="stat-label">Confirmed</span>
+        </div>
+      </div>
+      <% } %>
     </div>
-    <% }) %>
+
+    <!-- Empty State -->
+    <% if(bookings.length === 0){ %>
+    <div class="empty-bookings-state">
+      <div class="empty-icon">
+        <i class="fas fa-suitcase-rolling"></i>
+      </div>
+      <h4 class="fw-bold mb-3">No bookings yet</h4>
+      <p class="text-muted mb-4">
+        Start planning your next adventure by booking amazing places to stay!
+      </p>
+      <a href="/listings" class="btn empty-action-btn">
+        <i class="fas fa-search me-2"></i>Explore Listings
+      </a>
+    </div>
+    <% } else { %>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs mb-4">
+      <button class="filter-tab active" data-status="all">
+        <i class="fas fa-list me-2"></i>All Bookings
+      </button>
+      <button class="filter-tab" data-status="pending">
+        <i class="fas fa-clock me-2"></i>Pending
+      </button>
+      <button class="filter-tab" data-status="accepted">
+        <i class="fas fa-check-circle me-2"></i>Confirmed
+      </button>
+      <button class="filter-tab" data-status="rejected">
+        <i class="fas fa-times-circle me-2"></i>Rejected
+      </button>
+    </div>
+
+    <!-- Enhanced Bookings Grid -->
+    <div class="bookings-grid">
+      <% bookings.forEach((booking, index) => { %>
+      <div
+        class="booking-card"
+        data-status="<%= booking.status %>"
+        style="animation-delay: <%= index * 100 %>ms"
+      >
+        <div class="booking-card-inner">
+          <!-- Status Indicator -->
+          <div class="status-indicator <%= booking.status %>"></div>
+
+          <!-- Booking Header -->
+          <div class="booking-header">
+            <div class="property-info">
+              <h5 class="property-title"><%= booking.listing.title %></h5>
+              <div class="property-location">
+                <i class="fas fa-map-marker-alt me-1"></i>
+                <%= booking.listing.location %>, <%= booking.listing.country %>
+              </div>
+            </div>
+            <div class="status-badge <%= booking.status %>">
+              <% if (booking.status === 'pending') { %>
+              <i class="fas fa-hourglass-half me-1"></i>Pending <% } else if
+              (booking.status === 'accepted') { %>
+              <i class="fas fa-check-circle me-1"></i>Confirmed <% } else if
+              (booking.status === 'rejected') { %>
+              <i class="fas fa-times-circle me-1"></i>Rejected <% } else { %>
+              <i class="fas fa-question-circle me-1"></i><%= booking.status %>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Booking Details -->
+          <div class="booking-details">
+            <div class="detail-row">
+              <div class="detail-icon">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div class="detail-content">
+                <span class="detail-label">Host</span>
+                <span class="detail-value"
+                  ><%= booking.listing.owner.username %></span
+                >
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-icon">
+                <i class="fas fa-calendar-plus"></i>
+              </div>
+              <div class="detail-content">
+                <span class="detail-label">Check-in</span>
+                <span class="detail-value">
+                  <%= new Date(booking.checkin).toLocaleDateString('en-US', {
+                  weekday: 'short', year: 'numeric', month: 'short', day:
+                  'numeric' }) %>
+                </span>
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-icon">
+                <i class="fas fa-calendar-minus"></i>
+              </div>
+              <div class="detail-content">
+                <span class="detail-label">Check-out</span>
+                <span class="detail-value">
+                  <%= new Date(booking.checkout).toLocaleDateString('en-US', {
+                  weekday: 'short', year: 'numeric', month: 'short', day:
+                  'numeric' }) %>
+                </span>
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-icon">
+                <i class="fas fa-moon"></i>
+              </div>
+              <div class="detail-content">
+                <span class="detail-label">Duration</span>
+                <span class="detail-value">
+                  <% const checkin = new Date(booking.checkin); const checkout =
+                  new Date(booking.checkout); const nights = Math.ceil((checkout
+                  - checkin) / (1000 * 60 * 60 * 24)); %> <%= nights %> <%=
+                  nights === 1 ? 'night' : 'nights' %>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Booking Actions -->
+          <div class="booking-actions">
+            <a
+              href="/listings/<%= booking.listing._id %>"
+              class="action-btn view-btn"
+            >
+              <i class="fas fa-eye me-2"></i>View Property
+            </a>
+
+            <% if (booking.status === 'pending') { %>
+            <button
+              class="action-btn cancel-btn"
+              onclick="cancelBooking('<%= booking._id %>')"
+            >
+              <i class="fas fa-times me-2"></i>Cancel
+            </button>
+            <% } else if (booking.status === 'accepted') { %>
+            <button
+              class="action-btn contact-btn"
+              onclick="contactHost('<%= booking.listing.owner.username %>')"
+            >
+              <i class="fas fa-message me-2"></i>Contact Host
+            </button>
+            <% } %>
+          </div>
+
+          <!-- Booking Footer -->
+          <div class="booking-footer">
+            <div class="booking-date">
+              <i class="fas fa-clock me-1"></i>
+              <span
+                >Booked on <%= new Date(booking.createdAt ||
+                Date.now()).toLocaleDateString() %></span
+              >
+            </div>
+            <div class="booking-id">
+              #<%= booking._id.toString().slice(-6).toUpperCase() %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    <% } %>
   </div>
-  <% } %>
 </div>
+<script src="/js/showBooking.js"></script>
