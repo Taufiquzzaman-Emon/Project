@@ -752,3 +752,23 @@
 .dropdown-menu::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 90, 95, 0.5);
 }
+
+/* Hide responsive nav items in dropdown on large screens */
+@media (min-width: 1001px) {
+    .user-menu .responsive-item {
+        display: none !important;
+    }
+}
+
+/* Show them only below 1000px */
+@media (max-width: 1000px) {
+    .main-nav-link {
+        display: none !important;
+        /* hide main navbar links */
+    }
+
+    .user-menu .responsive-item {
+        display: flex !important;
+        /* show inside dropdown */
+    }
+}

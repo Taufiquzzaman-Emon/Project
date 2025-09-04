@@ -43,15 +43,15 @@
 
     <!-- Right Section -->
     <div class="right-section">
-      <!-- Host Link -->
-      <a class="host-link d-none d-lg-flex" href="/listings/new">
+      <!-- Host Link (Visible only on large screens) -->
+      <a class="host-link d-none d-xl-flex main-nav-link" href="/listings/new">
         <i class="fas fa-home me-2"></i>
         <span>Offer a Stay</span>
       </a>
 
-      <!-- My Bookings -->
+      <!-- My Bookings (Visible only on large screens) -->
       <% if (typeof currUser !== 'undefined' && currUser) { %>
-      <a class="bookings-link d-none d-md-flex" href="/bookings">
+      <a class="bookings-link d-none d-xl-flex main-nav-link" href="/bookings">
         <i class="fas fa-calendar-alt me-2"></i>
         <span>My Bookings</span>
       </a>
@@ -139,22 +139,21 @@
           </li>
           <li><hr class="dropdown-divider" /></li>
 
-          <!-- Offer a Stay (Responsive) -->
+          <!-- Responsive Nav Links (Only for small screens) -->
+
           <li>
             <a
               href="/listings/new"
-              class="dropdown-item user-menu-item logout-item"
+              class="dropdown-item user-menu-item responsive-item"
             >
               <i class="fas fa-home me-2"></i>
               <span>Offer a Stay</span>
             </a>
           </li>
-
-          <!-- My Bookings (Responsive) -->
           <li>
             <a
               href="/bookings"
-              class="dropdown-item user-menu-item logout-item"
+              class="dropdown-item user-menu-item responsive-item"
             >
               <i class="fas fa-calendar-alt me-2"></i>
               <span>My Bookings</span>
