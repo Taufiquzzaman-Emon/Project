@@ -599,6 +599,7 @@
 
     .nav-link {
         padding: 0.5rem 0.75rem;
+
     }
 
     .nav-icon {
@@ -658,9 +659,14 @@
     }
 
     .brand-section {
-        width: 100%;
+        margin: 0 auto;
+        /* centers it */
+        width: auto;
+        /* keeps content width */
         display: flex;
         justify-content: center;
+        pointer-events: auto;
+        /* allows clicks */
     }
 
     .brand-icon {
@@ -694,9 +700,8 @@
     }
 
     .right-section {
-        position: absolute;
-        top: 0.5rem;
-        right: 1rem;
+        position: relative;
+        z-index: 3;
     }
 }
 

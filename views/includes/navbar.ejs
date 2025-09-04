@@ -17,7 +17,6 @@
 
     <!-- Central Navigation & Search -->
     <div class="central-nav-section">
-      <!-- Navigation Link -->
       <div class="nav-item">
         <a class="nav-link" href="/listings">
           <i class="fa-solid fa-house me-2"></i>
@@ -25,7 +24,6 @@
         </a>
       </div>
 
-      <!-- Simplified Search Box -->
       <div class="search-container">
         <form action="/listings" method="GET" class="search-form">
           <div class="search-box">
@@ -51,7 +49,7 @@
         <span>Offer a Stay</span>
       </a>
 
-      <!-- My Bookings (if logged in) -->
+      <!-- My Bookings -->
       <% if (typeof currUser !== 'undefined' && currUser) { %>
       <a class="bookings-link d-none d-md-flex" href="/bookings">
         <i class="fas fa-calendar-alt me-2"></i>
@@ -59,7 +57,7 @@
       </a>
       <% } %>
 
-      <!-- Notifications (if logged in) -->
+      <!-- Notifications -->
       <% if(currUser) { %>
       <div class="notification-dropdown">
         <button
@@ -100,7 +98,7 @@
       </div>
       <% } %>
 
-      <!-- User Menu -->
+      <!-- User Dropdown -->
       <div class="user-dropdown">
         <button
           class="user-menu-btn"
@@ -115,7 +113,7 @@
         </button>
 
         <ul class="dropdown-menu user-menu">
-          <% if (typeof currUser === 'undefined' || !currUser) { %>
+          <% if (!currUser) { %>
           <li class="dropdown-header">Welcome to Voyago</li>
           <li><hr class="dropdown-divider" /></li>
           <li>
@@ -140,6 +138,29 @@
             </div>
           </li>
           <li><hr class="dropdown-divider" /></li>
+
+          <!-- Offer a Stay (Responsive) -->
+          <li>
+            <a
+              href="/listings/new"
+              class="dropdown-item user-menu-item logout-item"
+            >
+              <i class="fas fa-home me-2"></i>
+              <span>Offer a Stay</span>
+            </a>
+          </li>
+
+          <!-- My Bookings (Responsive) -->
+          <li>
+            <a
+              href="/bookings"
+              class="dropdown-item user-menu-item logout-item"
+            >
+              <i class="fas fa-calendar-alt me-2"></i>
+              <span>My Bookings</span>
+            </a>
+          </li>
+
           <li>
             <a class="dropdown-item user-menu-item logout-item" href="/logout">
               <i class="fa-solid fa-right-from-bracket"></i>

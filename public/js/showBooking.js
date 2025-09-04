@@ -67,7 +67,7 @@ function setupFilterTabs() {
   });
 }
 
-function cancelBooking(bookingid) {
+function cancelBooking(bookingId) {
   if (confirm("Are you sure you want to cancel this booking?")) {
     showNotification("Cancelling booking...", "info");
 
@@ -123,28 +123,60 @@ function showNotification(message, type = "success") {
 
   const iconClass =
     type === "success"
-      ? "fas fa-check-circle"
+      ? "fa-check-circle"
       : type === "error"
-      ? "fas fa-times-circle"
-      : "fas fa-info-circle";
+      ? "fa-exclamation-circle"
+      : "fa-info-circle";
   const iconColor =
     type === "success" ? "#10b981" : type === "error" ? "#ef4444" : "#3b82f6";
 
   notification.innerHTML = `
-      <i class="${iconClass}" style="color: ${iconColor};"></i>
-      <span>${message}</span>
+      <div style="color: ${iconColor}; font-size: 1.25rem;">
+        <i class="fas ${iconClass}"></i>
+      </div>
+      <div>${message}</div>
     `;
 
   document.body.appendChild(notification);
 
-  setTimeout(() => {
-    notification.style.transform = "translateX(0)";
-  }, 10);
+  setTimeout(() => (notification.style.transform = "translateX(0)"), 100);
 
   setTimeout(() => {
     notification.style.transform = "translateX(400px)";
-    notification.addEventListener("transitionend", () => {
-      notification.remove();
-    });
-  }, 4000);
+    setTimeout(() => notification.remove(), 400);
+  }, 3000);
 }
+
+// Add parallax effect
+document.addEventListener("mousemove", function (e) {
+  const x = (e.clientX / window.innerWidth) * 100;
+  const y = (e.clientY / window.innerHeight) * 100;
+
+  document.querySelector(".bookings-page").style.backgroundPosition = `${
+    x / 20
+  }% ${y / 20}%`;
+});
+
+// Count animation on load
+function animateStats() {
+  const statNumbers = document.querySelectorAll(".stat-number");
+
+  statNumbers.forEach((stat) => {
+    const target = parseInt(stat.textContent);
+    let current = 0;
+    const increment = target / 30;
+
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        stat.textContent = target;
+        clearInterval(timer);
+      } else {
+        stat.textContent = Math.floor(current);
+      }
+    }, 50);
+  });
+}
+
+// Run stats animation after page load
+setTimeout(animateStats, 1000);
