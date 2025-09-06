@@ -25,6 +25,26 @@ router
     userController.login
   );
 
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/login?error=oauth_failed",
+  }),
+  (req, res) => {
+    // Set flash message for successful login
+    req.flash(
+      "success",
+      `Welcome, ${req.user.displayName || req.user.username}!`
+    );
+    res.redirect("/listings"); // redirect to your desired page
+  }
+);
+
 // logout route
 router.get("/logout", userController.logout);
 

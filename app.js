@@ -22,6 +22,7 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const bookingRoutes = require("./routes/bookings");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 // --- Connect to MongoDB ---
 const dbUrl = process.env.ATLASDB_URL;
@@ -80,6 +81,49 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error") || [];
   next();
 });
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/auth/google/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        // Check if user already exists
+        let user = await User.findOne({ googleId: profile.id });
+
+        if (user) {
+          return done(null, user);
+        }
+
+        // Check if user exists with same email
+        user = await User.findOne({ email: profile.emails[0].value });
+
+        if (user) {
+          // Link Google account to existing user
+          user.googleId = profile.id;
+          await user.save();
+          return done(null, user);
+        }
+
+        // Create new user
+        const newUser = new User({
+          googleId: profile.id,
+          username: profile.displayName,
+          email: profile.emails[0].value,
+          // Don't set password for OAuth users
+        });
+
+        await newUser.save();
+        done(null, newUser);
+      } catch (error) {
+        done(error, null);
+      }
+    }
+  )
+);
 
 // --- Make pending booking count available globally ---
 app.use(async (req, res, next) => {
